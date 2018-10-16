@@ -43,20 +43,6 @@ private:
   int col;
   int row;
 };
-int manhattanDist (int p_Row,int p_Col, int n_Row, int n_Col, int p_Val, int n_Val){
-    int Val = 0;
-    if ((p_Val + n_Val) == 0){
-       Val = p_Val;
-    }
-    else if((p_Val + n_Val) < 0){
-      Val = p_Val;
-    }
-    else if((p_Val + n_Val) > 0){
-      Val = abs(n_Val);
-    }
-    int dist = (abs(p_Row - n_Row) + abs(p_Col - n_Col )) * Val;
-  return dist;
-  }
 
   int manhattanDist (SpareMatrix   & pos , SpareMatrix  & neg ){
       int Val = 0;
@@ -81,45 +67,41 @@ int manhattanDist (int p_Row,int p_Col, int n_Row, int n_Col, int p_Val, int n_V
 
        int min = INT_MAX;
       for (int j = 0; j < neg.size(); j++) {
-
-        std::cout <<"pos: " << i <<" " <<"neg: " << j << std::endl;
         int temp = manhattanDist(pos[i],neg[j]);
-
-        if( temp < min){
+        if( temp < min && temp !=0){
           min = temp;
-        std::cout <<"minimum: " <<min  << " " <<"pozi: " << j<<std::endl;
           count = j;
+        }
       }
-    pos[i].displaySpareMatrix();
-    std::cout <<"FORON BELULI" << std::endl;
-    neg[count].displaySpareMatrix();
+
     sum += min;
     int posVal = pos[i].getVal();
     int negVal =  neg[count].getVal();
     int pos_negVal = posVal + negVal;
 
 
-
-
     if(pos_negVal > 0 ){
       isNull = false;
-      neg.erase(neg.begin() + count);
+     neg.erase(neg.begin() + count);
       pos[i].setVal(pos_negVal);
     }
     else if (pos_negVal < 0){
-        pos.erase(pos.begin() + i);
+            isNull= true;
+        //pos.erase(pos.begin() + i);
         neg[count].setVal(pos_negVal);
     }
     else if (pos_negVal == 0){
-      pos.erase(pos.begin() + i);
-      neg.erase(neg.begin()+count);
+        isNull = true;
+     // pos.erase(pos.begin() + i);
+      neg.erase(neg.begin() + count);
     }
     else{
       std::cout << "GIGA HÜLYE VAGY" << std::endl;
     }
-    }
+
+
      if(isNull){
-      i++;
+        ++i;
       }
 }
 return sum;
@@ -131,9 +113,8 @@ return sum;
 
       int sparseMatrix[2][3] =
       {
-          {2 , -2 , 0  },
-          {0 , -2 , 2 },
-
+          {0 , -2, 0  },
+          {0 , -2 , 4 }
       };
       int row_size = 0, col_size = 0;
       std::cin >> row_size >> col_size;
@@ -157,30 +138,9 @@ return sum;
                 negVector.push_back(temp);
 
               }
-}
+    }
 
+        std::cout << blackMagic(posVector,negVector);
 
-          for(auto i : posVector){
-              i.displaySpareMatrix();
-          std::cout << std::endl;
-        }
-          std::cout << "negativ" << std::endl;
-        for (auto i: negVector) {
-        i.displaySpareMatrix();
-        std::cout << std::endl;
-      }
-        std::cout <<"endval: "<< blackMagic(posVector,negVector) << std::endl;
-
-          for(auto i : posVector){
-              i.displaySpareMatrix();
-          std::cout << std::endl;
-        }
-          std::cout << "negativ" << std::endl;
-        for (auto i: negVector) {
-        i.displaySpareMatrix();
-        std::cout << std::endl;
-      }
-
-    std::cout <<"halok: " << manhattanDist(2,3,2,2,2,-2) << std::endl;
       return 0;
   }
